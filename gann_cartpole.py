@@ -84,7 +84,7 @@ if __name__ == "__main__":
                         mutation_type=mutation_type,
                         keep_parents=keep_parents,
                         on_generation=callback_generation,
-                        parallel_processing=['process', 1])
+                        parallel_processing=['process', 8])
 
     # ga_instance = pygad.load('C:\\Users\\mnsaaqui\\Desktop\\python\\IA\\genetic_algorithms\\ganncartpole')
     # ga_instance.num_generations = 10
