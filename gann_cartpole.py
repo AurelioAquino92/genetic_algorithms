@@ -8,10 +8,10 @@ def fitness_func(solution, sol_idx):
     global GANN_instance, env
 
     solution_fitness = 0
-    for _ in range(20):
+    for _ in range(200):
         obs, _ = env.reset()
         done = False
-        inputs = numpy.append(obs, [obs, obs, obs])
+        inputs = numpy.append(obs, [obs, obs])
         while not done:
             data_input = numpy.array([inputs])
             prediction = predict(last_layer=GANN_instance.population_networks[sol_idx],
@@ -32,9 +32,10 @@ def callback_generation(ga_instance):
 
     GANN_instance.update_population_trained_weights(population_trained_weights=population_matrices)
 
-    fitness = ga_instance.best_solution()[1].copy()
+    _, fitness, idx_best = ga_instance.best_solution()
     if fitness > last_fitness:
         print("Generation = {generation}".format(generation=ga_instance.generations_completed))
+        print("Idx Best   = {idx_b}".format(idx_b=idx_best))
         print("Fitness    = {fitness}".format(fitness=fitness))
         print("Change     = {change}".format(change=fitness - last_fitness))
         ga_instance.save('ganncartpole')
@@ -55,10 +56,10 @@ last_fitness = 0
 
 num_solutions = 50 # A solution or a network can be used interchangeably.
 GANN_instance = pygad.gann.GANN(num_solutions=num_solutions,
-                                num_neurons_input=16,
-                                num_neurons_hidden_layers=[21, 8],
+                                num_neurons_input=12,
+                                num_neurons_hidden_layers=[7],
                                 num_neurons_output=2,
-                                hidden_activations=["relu", "relu"],
+                                hidden_activations=["relu"],
                                 output_activation="relu")
 
 if __name__ == "__main__":
@@ -86,7 +87,7 @@ if __name__ == "__main__":
                         on_generation=callback_generation,
                         parallel_processing=['process', 8])
 
-    # ga_instance = pygad.load('C:\\Users\\mnsaaqui\\Desktop\\python\\IA\\genetic_algorithms\\ganncartpole')
+    # ga_instance = pygad.load('C:\\Users\\aurel\\Documents\\Projetos\\genetic_algorithms\\ganncartpole')
     # ga_instance.num_generations = 10
     ga_instance.run()
     ga_instance.plot_fitness()
