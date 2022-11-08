@@ -9,21 +9,17 @@ def fitness_func(solution, sol_idx):
 
     solution_fitness = 0
     for _ in range(20):
-        obs = env.reset()
+        obs, _ = env.reset()
         done = False
-        acc_cart = 0
-        acc_ang = 0
+        inputs = numpy.append(obs, [obs, obs, obs])
         while not done:
-            data_input = numpy.array([numpy.append(obs, [acc_cart, acc_ang])])
+            data_input = numpy.array([inputs])
             prediction = predict(last_layer=GANN_instance.population_networks[sol_idx],
                                    data_inputs=data_input, problem_type="regression")
             action = numpy.argmax(prediction)
-            vel_cart = obs[1].copy()
-            vel_ang = obs[3].copy()
-            obs, reward, done, _ = env.step(action)
-            env.render()
-            acc_cart = vel_cart - obs[1]
-            acc_ang = vel_ang - obs[3]
+            obs, reward, done, _, _ = env.step(action)
+            inputs = numpy.append(obs, inputs[:-4])
+            # env.render()
             solution_fitness += reward - numpy.abs(obs[0]) / 100 - numpy.abs(obs[2])
         
     return solution_fitness
@@ -59,8 +55,8 @@ last_fitness = 0
 
 num_solutions = 50 # A solution or a network can be used interchangeably.
 GANN_instance = pygad.gann.GANN(num_solutions=num_solutions,
-                                num_neurons_input=6,
-                                num_neurons_hidden_layers=[10, 5],
+                                num_neurons_input=16,
+                                num_neurons_hidden_layers=[21, 8],
                                 num_neurons_output=2,
                                 hidden_activations=["relu", "relu"],
                                 output_activation="relu")
@@ -78,16 +74,11 @@ if __name__ == "__main__":
     mutation_type = "random" # Type of the mutation operator.
     keep_parents = 2 # Number of parents to keep in the next population. -1 means keep all parents and 0 means keep nothing.
 
-    init_range_low = -1
-    init_range_high = 1
-
     ga_instance = pygad.GA(num_generations=num_generations,
                         num_parents_mating=num_parents_mating,
                         initial_population=initial_population,
                         fitness_func=fitness_func,
                         mutation_percent_genes=mutation_percent_genes,
-                        init_range_low=init_range_low,
-                        init_range_high=init_range_high,
                         parent_selection_type=parent_selection_type,
                         crossover_type=crossover_type,
                         mutation_type=mutation_type,

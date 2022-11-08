@@ -5,9 +5,9 @@ from pygad.nn import predict
 from pygad.gann import GANN, population_as_matrices
 from gann_cartpole import fitness_func, callback_generation
 
-ga_instance_run = load('C:\\Users\\mnsaaqui\\Desktop\\python\\IA\\genetic_algorithms\\ganncartpole')
+ga_instance_run = load('C:\\Users\\aurel\\Documents\\Projetos\\genetic_algorithms\\ganncartpole')
 ga_instance_run.parallel_processing = None
-env_run = make('CartPole-v1')
+env_run = make('CartPole-v1', render_mode="human")
 GANN_instance2 = GANN(num_solutions=50,
                     num_neurons_input=6,
                     num_neurons_hidden_layers=[10, 5],
@@ -19,7 +19,7 @@ GANN_instance2.update_population_trained_weights(population_matrices)
 nn = GANN_instance2.population_networks[0]#ga_instance_run.best_solution()[2]]
 
 for episode in range(5):
-    obs = env_run.reset()
+    obs, _ = env_run.reset()
     done = False
     acc_cart = 0
     acc_ang = 0
@@ -29,7 +29,7 @@ for episode in range(5):
         action = argmax(prediction)
         vel_cart = obs[1].copy()
         vel_ang = obs[3].copy()
-        obs, rewards, done, info = env_run.step(action)
+        obs, rewards, done, info, _ = env_run.step(action)
         acc_cart = vel_cart - obs[1]
         acc_ang = vel_ang - obs[3]
         env_run.render()
