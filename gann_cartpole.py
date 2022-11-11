@@ -38,7 +38,7 @@ def callback_generation(ga_instance):
         print("Idx Best   = {idx_b}".format(idx_b=idx_best))
         print("Fitness    = {fitness}".format(fitness=fitness))
         print("Change     = {change}".format(change=fitness - last_fitness))
-        ga_instance.save('ganncartpole')
+        ga_instance.save('ganncartpole-gen{gen}-idx{idx}'.format(gen=ga_instance.generations_completed, idx=idx_best))
         # obs = env.reset()
         # done = False
         # while not done:
