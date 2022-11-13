@@ -17,6 +17,7 @@ for episode in range(5):
     while not done:
         prediction = predict(model, solution, tensor(array(inputs)))
         action = argmax(prediction.detach().numpy()) 
+        print(action)
         obs, rewards, done, info, _ = env_run.step(action)
         inputs = append(obs, inputs[:-4])
         env_run.render()

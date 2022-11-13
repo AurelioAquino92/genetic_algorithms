@@ -9,7 +9,7 @@ def fitness_func(solution, sol_idx):
     global torch_ga, model
 
     solution_fitness = 0
-    for _ in range(20):
+    for _ in range(1):
         obs, _ = env.reset()
         inputs = numpy.append(obs, [obs, obs])
         done = False
@@ -70,9 +70,9 @@ if __name__ == "__main__":
                             mutation_type="random",
                             keep_parents=2,
                             on_generation=callback_generation,
-                            parallel_processing=['process', 8])
+                            parallel_processing=['process', 1])
 
-    ga_instance = pygad.load('torchgacartpole')
+    # ga_instance = pygad.load('torchgacartpole')
     # ga_instance.num_generations = 10
     tempo = time()
     ga_instance.run()
